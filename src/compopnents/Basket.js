@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import util from "../Util";
+import {addToCart, removeFromCart} from "../actions/CartActions";
 
-export default class Basket extends Component {
+class Basket extends Component {
   render() {
     const { cartItems } = this.props;
     return (
@@ -22,9 +24,7 @@ export default class Basket extends Component {
                   <button
                     style={{ float: "right" }}
                     className="btn btn-danger btn-xs"
-                    onClick={(e) =>
-                      this.props.handleRemoveFromCart(this.props.cartItems, item)
-                    }
+                    onClick = {() => this.props.removeFromCart(this.props.cartItems, item)}
                   >
                     X
                   </button>
@@ -52,3 +52,9 @@ export default class Basket extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  cartItems: state.cart.items,
+})
+
+export default connect(mapStateToProps, { removeFromCart })(Basket);

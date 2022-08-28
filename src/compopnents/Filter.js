@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {connect}  from "react-redux";
+import {filterProducts, sortProducts} from "../actions/ProductActions";
 
-export default class Filter extends Component {
+class Filter extends Component {
   render() {
-      console.log("props of filter..", this.props);
+      console.log("--->>>> ", this.props.filterProducts);
     return (
         <div className="row">
             <div className="col-md-4">
-                {`${this.props.count} 
+                {`${this.props.filteredProducts.length} 
             products found.`}</div>
             <div className="col-md-4">
             <label>
@@ -14,13 +16,12 @@ export default class Filter extends Component {
                 <select
                 className="form-control"
                 value={this.props.sort}
-                onChange = {this.props.handleChangeSort}
-                // onChange={(event) => {
-                //     this.props.sortProducts(
-                //     this.props.filteredProducts,
-                //     event.target.value
-                //     );
-                // }}
+                onChange={(event) => {
+                    this.props.sortProducts(
+                    this.props.filteredProducts,
+                    event.target.value
+                    );
+                }}
                 >
                 <option value="">Select</option>
                 <option value="lowestprice">Lowest to highest</option>
@@ -35,13 +36,12 @@ export default class Filter extends Component {
                 <select
                 className="form-control"
                 value={this.props.size}
-                onChange = {this.props.handleChangeSize}
-                // onChange={(event) => {
-                //     this.props.filterProducts(
-                //     this.props.products,
-                //     event.target.value
-                //     );
-                // }}
+                onChange={(event) => {
+                    this.props.filterProducts(
+                    this.props.products,
+                    event.target.value
+                    );
+                }}
                 >
                 <option value="">ALL</option>
                 <option value="X">XS</option>
@@ -57,3 +57,12 @@ export default class Filter extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+    products: state.products.items,
+    filteredProducts: state.products.filteredItems,
+    size: state.products.size,
+    sort: state.products.sort,
+})
+  
+export default connect(mapStateToProps, {filterProducts, sortProducts})(Filter);
